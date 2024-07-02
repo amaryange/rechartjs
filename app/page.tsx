@@ -58,7 +58,7 @@ export default function Home() {
   const totalCashIn = data.reduce((acc, entry) => acc + entry.cashIn, 0);
 
 
-  const totalInflation = currentData.reduce((acc, entry) => acc + entry.value, 0);
+  const totalValue = currentData.reduce((sum, item) => sum + Math.abs(item.value), 0);
 
   return (
       <>
@@ -282,7 +282,7 @@ export default function Home() {
                   <LabelList
                       dataKey="value"
                       position="top"
-                      formatter={(value) => `${((value / totalInflation) * 100).toFixed(2)}%`}
+                      formatter={(value) => `${((Math.abs(value) / totalValue) * 100).toFixed(1)}%`}
                       fontSize={10}
                   />
                 </Bar>
