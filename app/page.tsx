@@ -1,113 +1,296 @@
+"use client"
+
 import Image from "next/image";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid, Cell, LabelList, Legend,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
+import {useEffect, useState} from "react";
+import {datas} from "@/lib/data"
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+
+  const data = [
+    { date: "2023-04-01", cashIn: -1926, cashOut: 1450 },
+    { date: "2023-04-02", cashIn: 2994, cashOut: 2235 },
+    { date: "2023-04-03", cashIn: -500, cashOut: 3668 },
+    { date: "2023-04-04", cashIn: 8000, cashOut: 4959 },
+    { date: "2023-04-05", cashIn: 12000, cashOut: 6277 },
+    { date: "2023-04-06", cashIn: 11000, cashOut: 6876 },
+    { date: "2023-04-07", cashIn: -4000, cashOut: 7410 },
+    { date: "2023-04-08", cashIn: 7000, cashOut: 8624 },
+    { date: "2023-04-09", cashIn: 12000, cashOut: 9890 },
+    { date: "2023-04-10", cashIn: 16000, cashOut: 10955 },
+    { date: "2023-04-11", cashIn: 17000, cashOut: 11712 },
+    { date: "2023-04-12", cashIn: 18000, cashOut: 12811 },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % datas.length);
+    }, 2000); // Change month every 2 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentData = datas[currentIndex].data;
+
+  const CustomLegend = () => {
+    return (
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+          <strong>{datas[currentIndex].date}</strong>
         </div>
-      </div>
+    );
+  };
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+  //--------------------------------------------------------------------------------------------------
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+  const totalCashIn = data.reduce((acc, entry) => acc + entry.cashIn, 0);
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+  const totalInflation = currentData.reduce((acc, entry) => acc + entry.value, 0);
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+  return (
+      <>
+
+        {/*
+          <div className="w-full max-w-lg h-56 border border-slate-700 p-2 m-2 rounded-md">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                  data={data}
+              >
+
+                <CartesianGrid
+                    strokeDasharray="4 4"
+                    stroke="#1e293b"
+                    vertical={false}
+                />
+
+                <Area
+                    dataKey="cashIn"
+                    type="monotone"
+                    stroke="#06b6d4"
+                    fill={`url(#cyan-gradient)`}
+                />
+
+                <XAxis
+                    dataKey="date"
+                    fontSize={10}
+                    stroke={"#334155"}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={3}
+                    tickFormatter={(value) => {
+                      return value.split('-').reverse().slice(0, 2).join("/");
+                    }}
+                />
+
+                <YAxis
+                  dataKey={"cashIn"}
+                  fontSize={10}
+                  stroke={"#334155"}
+                  tickLine={false}
+                  axisLine={false}
+                  interval={1}
+                  tickFormatter={(value) => {
+                    return `$${Intl.NumberFormat("en-US").format(value)}`;
+                  }}
+                />
+
+                <Tooltip
+                  cursor={{
+                    radius: 4,
+                    stroke: "#334155"
+                  }}
+                  content={({active, payload}) => {
+                    if(!active || !payload || payload.length === 0) return null;
+
+                    return (
+                        <div className="rounded-lg border bg-slate-800 border-slate-700 p-2 shadow-sm">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="flex flex-col">
+                              <span className="text-xs uppercase text-slate-500">
+                                Date
+                              </span>
+                              <span className="text-sm font-bold text-slate-300">
+                                {payload[0].payload.date}
+                              </span>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-xs uppercase text-slate-500">
+                                Cash In
+                              </span>
+                              <span className="text-sm font-bold text-slate-300">
+                                $
+                                {Intl.NumberFormat("en-US").format(
+                                    payload[0].payload.cashIn
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                    )
+                  }}
+                />
+
+                <defs>
+                  <linearGradient id="cyan-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.4}/>
+                    <stop offset="75%" stopColor="#8b5cf6" stopOpacity={0.05}/>
+                  </linearGradient>
+                </defs>
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="w-full max-w-lg h-72 border border-slate-700 p-2 m-2 rounded-md">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                  data={data}
+                  margin={{ top: 20 }}
+              >
+                <ReferenceLine y={0} stroke="#083344" label={{ value: '0', position: 'left', fill: '#334155', fontSize: 10, }} />
+                <Bar
+                    dataKey="cashIn"
+                    type="monotone"
+                >
+                  {data.map((entry, index) => (
+                      <Cell
+                          key={`cell-${index}`}
+                          fill={entry.cashIn < 0 ? "#dc2626" : "#0891b2"}
+                          stroke={entry.cashIn < 0 ? "#fca5a5" : "#67e8f9"} />
+                  ))}
+                  <LabelList
+                      dataKey="cashIn"
+                      position="top"
+                      formatter={(value) => `${((value / totalCashIn) * 100).toFixed(2)}%`}
+                      fontSize={10}
+                  />
+                </Bar>
+
+                <XAxis
+                    dataKey="date"
+                    fontSize={10}
+                    stroke={"#334155"}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={3}
+                    tickFormatter={(value) => {
+                      return value.split('-').reverse().slice(0, 2).join("/");
+                    }}
+                />
+
+                <YAxis
+                    dataKey={"cashIn"}
+                    fontSize={10}
+                    stroke={"#334155"}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={1}
+                    tickFormatter={(value) => {
+                      const formattedValue = Intl.NumberFormat("en-US").format(Math.abs(value));
+                      return value < 0 ? `-$${formattedValue}` : `$${formattedValue}`;
+                    }}
+                />
+
+                <Tooltip
+                    cursor={{
+                      fill: "rgba(0, 0, 0, 0.15)", // Transparent cursor with slight shading
+                    }}
+                    content={({active, payload}) => {
+                      if(!active || !payload || payload.length === 0) return null;
+
+                      return (
+                          <div className="rounded-lg border bg-slate-800 border-slate-700 p-2 shadow-sm">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="flex flex-col">
+                              <span className="text-xs uppercase text-slate-500">
+                                Date
+                              </span>
+                                <span className="text-sm font-bold text-slate-300">
+                                {payload[0].payload.date}
+                              </span>
+                              </div>
+                              <div className="flex flex-col">
+                              <span className="text-xs uppercase text-slate-500">
+                                Cash In
+                              </span>
+                                <span className="text-sm font-bold text-slate-300">
+                                {payload[0].payload.cashIn < 0
+                                    ? `-$${Intl.NumberFormat("en-US").format(Math.abs(payload[0].payload.cashIn))}`
+                                    : `$${Intl.NumberFormat("en-US").format(payload[0].payload.cashIn)}`
+                                }
+                              </span>
+                              </div>
+                            </div>
+                          </div>
+                      )
+                    }}
+                />
+
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          */}
+
+        <div className="flex items-center bg-slate-950 h-screen flex-col justify-center gap-4">
+
+          <div className="w-full max-w-lg h-96 border border-slate-700 p-2 m-2 rounded-md">
+            <ResponsiveContainer>
+              <BarChart
+                  data={currentData}
+                  margin={{
+                    top: 20, bottom: 5,
+                  }}
+              >
+                <ReferenceLine y={0} stroke="#083344" label={{ value: '0', position: 'left', fill: '#334155', fontSize: 10, }} />
+                <XAxis
+                    dataKey="category"
+                    fontSize={10}
+                    stroke={"#334155"}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={3}
+                />
+                <YAxis
+                    dataKey={"value"}
+                    fontSize={10}
+                    stroke={"#334155"}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={1}
+                />
+                <Tooltip />
+                <Legend content={<CustomLegend />} />
+                <Bar dataKey="value" fill="#fffbeb">
+                  {currentData.map((entry, index) => (
+                      <Cell
+                          key={`cell-${index}`}
+                          fill={entry.value < 0 ? "#dc2626" : "#0891b2"}
+                          stroke={entry.value < 0 ? "#fca5a5" : "#67e8f9"} />
+                  ))}
+                  <LabelList
+                      dataKey="value"
+                      position="top"
+                      formatter={(value) => `${((value / totalInflation) * 100).toFixed(2)}%`}
+                      fontSize={10}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+      </>
   );
 }
